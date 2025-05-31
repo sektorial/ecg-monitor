@@ -1,14 +1,13 @@
 <!DOCTYPE html>
-<html lang="en_US">
+<html>
 <head>
-    <meta charset="UTF-8"/>
-    <title>ECG Monitor</title>
+    <title>Hello World</title>
 </head>
-
 <body>
-<div id="page-container">
-    <h1>${msg}</h1>
-</div>
-
+<h1>${msg}</h1>
+<form action="/logout" method="post" style="display: inline">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    <button type="submit">Logout</button>
+</form>
 </body>
 </html>
