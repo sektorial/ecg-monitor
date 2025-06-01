@@ -2,6 +2,7 @@
 <html>
 <head>
     <title>Hello World</title>
+    <script src="/static/bundle.js" defer></script>
 </head>
 <body>
 <h1>${msg}</h1>
