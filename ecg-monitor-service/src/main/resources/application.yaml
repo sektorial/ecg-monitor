@@ -1,8 +1,19 @@
+ecg:
+  development:
+    hrm-enabled: true
+
 spring:
   freemarker:
     template-loader-path: classpath:/templates
     suffix: .ftlh
-
+  web:
+    resources:
+      chain:
+        enabled: true
+        strategy:
+          content:
+            enabled: true
+            paths: /**
 springdoc:
   api-docs:
     path: /api-docs
