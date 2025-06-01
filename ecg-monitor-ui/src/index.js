@@ -1,12 +1,11 @@
 import _ from 'lodash';
+import './index.css';
 
-const component = () => {
-    const element = document.createElement('div');
-    element.innerHTML = _.join([
+const footer = document.querySelector('.footer');
+if (footer) {
+    footer.textContent = _.join([
         'ECG Monitor',
         'V1.0, 2025'
     ], ' ');
-    return element;
 }
 
-document.body.appendChild(component());
