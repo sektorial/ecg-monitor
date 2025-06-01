@@ -1,18 +1,18 @@
-package ua.com.ivolnov.ecg;
+package ua.com.ivolnov.ecg.patient;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
-@RequestMapping("/web")
+@RequestMapping("/web/admin/patient")
 @Controller
-public class ViewController {
+public class AdminPatientViewController {
 
     @GetMapping
     public ModelAndView getHelloWorld() {
-        final ModelAndView modelAndView = new ModelAndView("hello-world");
-        modelAndView.getModel().put("msg", "Hello World");
+        final ModelAndView modelAndView = new ModelAndView("admin-patient");
+        modelAndView.getModel().put("msg", "Patient management will be here...");
         return modelAndView;
     }
 
