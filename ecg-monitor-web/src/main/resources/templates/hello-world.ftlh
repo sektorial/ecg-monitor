@@ -1,8 +1,12 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <title>Hello World</title>
-    <script src="/static/bundle.js" defer></script>
+    <#if hrmEnabled?? && hrmEnabled>
+        <script src="http://localhost:3000/bundle.js" type="text/javascript" defer></script>
+    <#else>
+        <script src="${resources.getForLookupPath("/static/bundle.js")}" type="text/javascript" defer></script>
+    </#if>
 </head>
 <body>
 <h1>${msg}</h1>
