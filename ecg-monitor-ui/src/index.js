@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import './index.css';
+import './patient/index.js';
 import SockJS from 'sockjs-client';
 import {Client} from '@stomp/stompjs';
 
