@@ -15,7 +15,7 @@
 
 
     <#if patients?size gt 0>
-        <table style="width:100%;margin-bottom:20px;">
+        <table class="table">
             <thead>
             <tr>
                 <th>Name</th>
@@ -24,13 +24,13 @@
             </tr>
             </thead>
             <tbody>
-            <#list patients as p>
+            <#list patients as patient>
                 <tr>
-                    <td>${p.name}</td>
-                    <td>${p.id}</td>
+                    <td>${patient.name}</td>
+                    <td>${patient.id}</td>
                     <td>
                         <form action="/web/admin/patient/remove" method="post" style="display:inline;">
-                            <input type="hidden" name="id" value="${p.id}">
+                            <input type="hidden" name="id" value="${patient.id}">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                             <button type="submit" onclick="return confirm('Delete patient?')">Remove</button>
                         </form>

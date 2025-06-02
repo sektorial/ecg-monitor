@@ -62,3 +62,9 @@ button:hover {
     font-size: 1em;
     color: #555;
 }
+
+.table {
+    width: 100%;
+    min-width: 350px;
+    margin: 20px auto;
+}

@@ -7,7 +7,7 @@
     <h1>${msg}</h1>
     <#include "fragments/nav-admin-back.ftlh">
 
-    <table border="1" style="margin: 20px auto; min-width: 350px;">
+    <table class="table">
         <thead>
         <tr>
             <th>Username</th>
@@ -17,13 +17,13 @@
         </thead>
         <tbody>
         <#if staff?? && staff?size gt 0>
-            <#list staff as s>
+            <#list staff as staff>
                 <tr>
-                    <td>${s.username}</td>
-                    <td>${s.password}</td>
+                    <td>${staff.username}</td>
+                    <td>${staff.password}</td>
                     <td>
                         <form action="/web/admin/staff/remove" method="post" style="display:inline;">
-                            <input type="hidden" name="username" value="${s.username}">
+                            <input type="hidden" name="username" value="${staff.username}">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                             <button type="submit" onclick="return confirm('Delete staff?')">Remove</button>
                         </form>
