@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -11,8 +12,13 @@ public class PatientService {
 
     private final Set<Patient> patients = new CopyOnWriteArraySet<>();
 
+    @PostConstruct
+    public void initStubPatient() {
+        addPatient("patient #1");
+    }
+
     public Set<Patient> getAllPatients() {
-        return patients;
+        return Set.copyOf(patients);
     }
 
     public void addPatient(final String name) {
