@@ -1,4 +1,4 @@
-package ua.com.ivolnov.ecg.configuration.authentication;
+package ua.com.ivolnov.ecg.common;
 
 import lombok.NoArgsConstructor;
 
@@ -10,4 +10,5 @@ public final class UserRole {
     public static final String ADMIN = "ADMIN";
     public static final String ROLE_ADMIN = "ROLE_ADMIN";
 
+    public static final String STAFF = "STAFF";
 }

@@ -5,7 +5,6 @@
 <body>
 <div class="container">
     <h1>${msg}</h1>
-    <#include "./fragments/logout-form.ftlh">
     <#include "./fragments/footer.ftlh">
 </div>
 </body>
