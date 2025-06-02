@@ -1,19 +1,39 @@
 package ua.com.ivolnov.ecg.patient;
 
+import java.util.UUID;
+
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @RequestMapping("/web/admin/patient")
 @Controller
+@RequiredArgsConstructor
 public class AdminPatientViewController {
 
+    private final PatientService patientService;
+
     @GetMapping
-    public ModelAndView getHelloWorld() {
-        final ModelAndView modelAndView = new ModelAndView("admin-patient");
-        modelAndView.getModel().put("msg", "Patient management will be here...");
-        return modelAndView;
+    public ModelAndView getPatients() {
+        final ModelAndView view = new ModelAndView("admin-patient");
+        view.addObject("msg", "Patient Management");
+        view.addObject("patients", patientService.getAllPatients());
+        return view;
     }
 
+    @PostMapping("/add")
+    public String addPatient(@RequestParam final String name) {
+        patientService.addPatient(name);
+        return "redirect:/web/admin/patient";
+    }
+
+    @PostMapping("/remove")
+    public String removePatient(@RequestParam final UUID id) {
+        patientService.removePatient(id);
+        return "redirect:/web/admin/patient";
+    }
 }

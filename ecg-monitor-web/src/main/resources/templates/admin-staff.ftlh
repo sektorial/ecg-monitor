@@ -25,7 +25,7 @@
                         <form action="/web/admin/staff/remove" method="post" style="display:inline;">
                             <input type="hidden" name="username" value="${s.username}">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                            <button type="submit">Remove</button>
+                            <button type="submit" onclick="return confirm('Delete staff?')">Remove</button>
                         </form>
                     </td>
                 </tr>
