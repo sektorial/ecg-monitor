@@ -68,3 +68,17 @@ button:hover {
     min-width: 350px;
     margin: 20px auto;
 }
+
+.ws-alert {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    background: #fa5252;
+    color: #fff;
+    padding: 15px 28px;
+    border-radius: 8px;
+    font-size: 1.1em;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    z-index: 9999;
+    opacity: 0.97;
+}

@@ -7,4 +7,7 @@
         <script src="${resources.getForLookupPath('/static/bundle.js')}" type="text/javascript" defer></script>
         <link rel="stylesheet" href="${resources.getForLookupPath('/static/main.css')}"
     </#if>
+    <script>
+        window.userRole = "${userRole!''}";
+    </script>
 </head>
