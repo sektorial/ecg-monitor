@@ -1,16 +1,21 @@
 package ua.com.ivolnov.ecg.patient;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.concurrent.ConcurrentHashMap;
 
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class PatientService {
 
-    private final Set<Patient> patients = new CopyOnWriteArraySet<>();
+    private final Map<UUID, Patient> patients = new ConcurrentHashMap<>();
+
+    private final EcgDataScheduler ecgEmulatorManager;
 
     @PostConstruct
     public void initStubPatient() {
@@ -18,14 +23,17 @@ public class PatientService {
     }
 
     public Set<Patient> getAllPatients() {
-        return Set.copyOf(patients);
+        return Set.copyOf(patients.values());
     }
 
     public void addPatient(final String name) {
-        patients.add(new Patient(UUID.randomUUID(), name));
+        final UUID id = UUID.randomUUID();
+        patients.put(id, new Patient(id, name));
+        ecgEmulatorManager.scheduleForPatient(id);
     }
 
     public void removePatient(final UUID id) {
-        patients.removeIf(patient -> patient.getId().equals(id));
+        patients.remove(id);
+        ecgEmulatorManager.unscheduleForPatient(id);
     }
 }

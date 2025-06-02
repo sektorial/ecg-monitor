@@ -1,4 +1,4 @@
-package ua.com.ivolnov.ecg;
+package ua.com.ivolnov.ecg.patient;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
