@@ -15,7 +15,8 @@ function connectPatientPageWS() {
         webSocketFactory: () => socket,
         onConnect: () => {
             stompClient.subscribe(`/topic/patient/${patientId}`, (msg) => {
-                console.log('WS ECG for patient', patientId, ':', msg.body);
+                const data = JSON.parse(msg.body);
+                console.log("ECG value:", data.value, "at", new Date(data.ts).toLocaleTimeString());
                 // TODO render chart here
             });
         }
