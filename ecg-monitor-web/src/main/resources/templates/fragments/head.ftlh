@@ -9,5 +9,8 @@
     </#if>
     <script>
         window.userRole = "${userRole!''}";
+        <#if patientId??>
+        window.patientId = "${patientId}";
+        </#if>
     </script>
 </head>
