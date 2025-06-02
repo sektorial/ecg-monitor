@@ -24,13 +24,14 @@ public class EcgDataScheduler {
     private static final ScheduledExecutorService SCHEDULER = Executors.newScheduledThreadPool(4);
     private static final Map<UUID, ScheduledFuture<?>> TASKS = new ConcurrentHashMap<>();
 
+
     private final SimpMessagingTemplate messagingTemplate;
+    private final EcgWaveGenerator ecgWaveGenerator;
 
     public void scheduleForPatient(final UUID patientId) {
         TASKS.computeIfAbsent(patientId, id -> SCHEDULER.scheduleAtFixedRate(() -> {
-            double value = generateEcgValue();
-            long ts = System.currentTimeMillis();
-            messagingTemplate.convertAndSend("/topic/patient/" + id, new EcgData(ts, value));
+            double value = ecgWaveGenerator.generateEcgValue(id);
+            messagingTemplate.convertAndSend("/topic/patient/" + id, new EcgData(value));
         }, 0, ECG_DATA_INTERVAL_MILLIS, MILLISECONDS));
     }
 
@@ -47,15 +48,11 @@ public class EcgDataScheduler {
         TASKS.clear();
     }
 
-    private double generateEcgValue() {
-        return 0.5 + (Math.random() - 0.5) * 0.2;
-    }
-
     @Value
     private static class EcgData {
-        @JsonProperty("ts")
-        long timestamp;
-        @JsonProperty("value")
+        @JsonProperty("ts_millis")
+        long timestamp = System.currentTimeMillis();
+        @JsonProperty("voltage")
         double value;
     }
 

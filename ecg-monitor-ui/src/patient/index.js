@@ -1,37 +1,38 @@
 import SockJS from 'sockjs-client';
 import {Client} from '@stomp/stompjs';
+import {addEcgPoint, initializeEcgChart} from './chart-helper';
 
 let stompClient = null;
 
-const patientId = window.patientId;
-
-function connectPatientPageWS() {
-    if (!patientId) {
-        console.log('No patientId');
-        return;
-    }
+const connectPatientPageWS = (patientId) => {
     const socket = new SockJS('/ws-alerts');
     stompClient = new Client({
         webSocketFactory: () => socket,
         onConnect: () => {
             stompClient.subscribe(`/topic/patient/${patientId}`, (msg) => {
-                const data = JSON.parse(msg.body);
-                console.log("ECG value:", data.value, "at", new Date(data.ts).toLocaleTimeString());
-                // TODO render chart here
+                try {
+                    const data = JSON.parse(msg.body);
+                    addEcgPoint(data);
+                } catch (e) {
+                    // show warning/error
+                }
             });
         }
     });
     stompClient.activate();
 }
 
-function disconnectPatientPageWS() {
+const disconnectPatientPageWS = () => {
     if (stompClient) {
         stompClient.deactivate();
         stompClient = null;
     }
 }
 
-if (patientId) {
-    connectPatientPageWS();
-    window.addEventListener('beforeunload', disconnectPatientPageWS);
-}
+document.addEventListener('DOMContentLoaded', () => {
+    if (window.patientId) {
+        initializeEcgChart();
+        connectPatientPageWS(window.patientId);
+        window.addEventListener('beforeunload', disconnectPatientPageWS);
+    }
+});
