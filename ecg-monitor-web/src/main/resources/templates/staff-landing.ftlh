@@ -10,15 +10,15 @@
         <table class="table">
             <thead>
             <tr>
-                <th>ID</th>
                 <th>Name</th>
             </tr>
             </thead>
             <tbody>
             <#list patients as patient>
                 <tr>
-                    <td>${patient.id}</td>
-                    <td>${patient.name}</td>
+                    <td>
+                        <a href="/web/staff/patient/${patient.id}">${patient.name}</a>
+                    </td>
                 </tr>
             </#list>
             </tbody>

@@ -4,8 +4,8 @@
 <#include "./fragments/head.ftlh">
 <body>
 <div class="container">
-    <h1>${msg}</h1>
     <#include "fragments/nav-admin-back.ftlh">
+    <h1>${msg}</h1>
 
     <form action="/web/admin/patient/add" method="post" style="margin-bottom:20px;">
         <input type="text" name="name" placeholder="Patient name" required>

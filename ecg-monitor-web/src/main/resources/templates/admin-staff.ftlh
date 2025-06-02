@@ -4,8 +4,8 @@
 <#include "./fragments/head.ftlh">
 <body>
 <div class="container">
-    <h1>${msg}</h1>
     <#include "fragments/nav-admin-back.ftlh">
+    <h1>${msg}</h1>
 
     <table class="table">
         <thead>
