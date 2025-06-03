@@ -28,9 +28,13 @@ final class EcgWaveGenerator {
             } else {
                 criticalSpikeMillis.set(currentTimeMillis);
             }
-            return EcgSourceSample.of(transformValueToSpike(valueWithNoise));
+            return EcgSourceSample.of(bound(transformValueToSpike(valueWithNoise)));
         }
-        return EcgSourceSample.of(valueWithNoise);
+        return EcgSourceSample.of(bound(valueWithNoise) );
+    }
+
+    private double bound(double value) {
+        return Math.max(-2.0, Math.min(2.0, value));
     }
 
     private double transformValueToSpike(final double value) {
