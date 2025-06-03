@@ -4,6 +4,17 @@ import {addEcgPoint, initializeEcgChart} from './chart-helper';
 
 let stompClient = null;
 
+async function loadHistoricalEcg(patientId) {
+    const fromMillis = Date.now() - 3600_000;
+    const response = await fetch(`/api/patient/${patientId}/ecg?from=${fromMillis}`);
+    if (!response.ok) {
+        alert('Failed to load ECG history');
+        return;
+    }
+    const history = await response.json();
+    history.forEach(addEcgPoint);
+}
+
 const connectPatientPageWS = (patientId) => {
     const socket = new SockJS('/ws-alerts');
     stompClient = new Client({
@@ -29,9 +40,10 @@ const disconnectPatientPageWS = () => {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
     if (window.patientId) {
         initializeEcgChart();
+        await loadHistoricalEcg(window.patientId);
         connectPatientPageWS(window.patientId);
         window.addEventListener('beforeunload', disconnectPatientPageWS);
     }
