@@ -16,21 +16,21 @@ final class EcgWaveGenerator {
     private static final double HEART_RATE_BPM = 72;
     private static final double HEART_RATE_SECONDS_PER_BEAT = 60.0 / HEART_RATE_BPM;
     private static final int CRITICAL_ECG_SPIKE_INTERVAL_MILLIS = 10_000;
-    private static final Map<UUID, AtomicLong> CRITICAL_SPIKES_MILLIS = new ConcurrentHashMap<>();
+    private static final Map<UUID, AtomicLong> SPIKES_MILLIS = new ConcurrentHashMap<>();
 
     EcgSourceSample generateEcgValue(final UUID patientId) {
         final long currentTimeMillis = System.currentTimeMillis();
         double valueWithNoise = enrichValueWithNoise(generatePlainEcgValue(currentTimeMillis));
         if (shouldInjectCriticalSpike(patientId, currentTimeMillis)) {
-            final AtomicLong criticalSpikeMillis = CRITICAL_SPIKES_MILLIS.get(patientId);
+            final AtomicLong criticalSpikeMillis = SPIKES_MILLIS.get(patientId);
             if (criticalSpikeMillis == null) {
-                CRITICAL_SPIKES_MILLIS.put(patientId, new AtomicLong(currentTimeMillis));
+                SPIKES_MILLIS.put(patientId, new AtomicLong(currentTimeMillis));
             } else {
                 criticalSpikeMillis.set(currentTimeMillis);
             }
             return EcgSourceSample.of(bound(transformValueToSpike(valueWithNoise)));
         }
-        return EcgSourceSample.of(bound(valueWithNoise) );
+        return EcgSourceSample.of(bound(valueWithNoise));
     }
 
     private double bound(double value) {
@@ -38,7 +38,9 @@ final class EcgWaveGenerator {
     }
 
     private double transformValueToSpike(final double value) {
-        return value + (Math.random() > 0.5 ? 1.8 : -1.8);
+        double sign = Math.random() > 0.5 ? 1 : -1;
+        double magnitude = 1.0 + Math.random(); // 1.5 to 2.0
+        return value + sign * magnitude;
     }
 
     private double enrichValueWithNoise(final double value) {
@@ -62,7 +64,7 @@ final class EcgWaveGenerator {
     }
 
     private static boolean shouldInjectCriticalSpike(final UUID id, final long currentTimeMillis) {
-        final AtomicLong criticalSpikeMillis = CRITICAL_SPIKES_MILLIS.get(id);
+        final AtomicLong criticalSpikeMillis = SPIKES_MILLIS.get(id);
         if (criticalSpikeMillis == null) {
             return true;
         }

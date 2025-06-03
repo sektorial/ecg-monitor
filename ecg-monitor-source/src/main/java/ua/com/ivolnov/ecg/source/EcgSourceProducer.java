@@ -3,8 +3,6 @@ package ua.com.ivolnov.ecg.source;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.function.Consumer;
 
@@ -13,31 +11,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import static java.util.concurrent.TimeUnit.MILLISECONDS;
-
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class EcgSourceProducer {
 
-    private static final int ECG_DATA_INTERVAL_MILLIS = 40;
-    private static final ScheduledExecutorService SCHEDULER = Executors.newScheduledThreadPool(4);
     private static final Map<UUID, ScheduledFuture<?>> TASKS = new ConcurrentHashMap<>();
 
-    private final EcgWaveGenerator ecgWaveGenerator;
+    private final EcgSourceScheduledTaskFactory taskFactory;
 
-    public void scheduleForPatient(final UUID patientId, final Consumer<EcgSourceSample> consumer) {
-        TASKS.computeIfAbsent(patientId,
-                id -> SCHEDULER.scheduleAtFixedRate(() -> {
-                            final EcgSourceSample sample = ecgWaveGenerator.generateEcgValue(id);
-                            consumer.accept(sample);
-                        },
-                        0,
-                        ECG_DATA_INTERVAL_MILLIS,
-                        MILLISECONDS));
+    public void initProducerForPatient(final UUID patientId, final Consumer<EcgSourceSample> consumer) {
+        TASKS.computeIfAbsent(patientId, id -> taskFactory.createTask(id, consumer));
     }
 
-    public void unscheduleForPatient(final UUID patientId) {
+    public void disposeProducerForPatient(final UUID patientId) {
         final ScheduledFuture<?> task = TASKS.remove(patientId);
         if (task != null) {
             task.cancel(true);
@@ -45,8 +32,8 @@ public class EcgSourceProducer {
     }
 
     @PreDestroy
-    public void unscheduleAll() {
-        TASKS.values().forEach(f -> f.cancel(true));
+    public void disposeAllProducers() {
+        TASKS.values().forEach(scheduledFuture -> scheduledFuture.cancel(true));
         TASKS.clear();
     }
 
