@@ -6,7 +6,7 @@ import 'chartjs-adapter-date-fns';
 
 Chart.register(zoomPlugin, streamingPlugin);
 
-const VISIBLE_MILLIS = 10_000;
+const VISIBLE_MILLIS = 15_000;
 const REDRAW_MILLIS = 40;
 const RETAIN_MILLIS = 3600_000;
 
@@ -28,9 +28,24 @@ export const initializeEcgChart = () => {
                     data: [],
                     borderColor: '#5c3dfa',
                     borderWidth: 1.8,
-                    pointRadius: 0,
                     fill: false,
                     tension: 0,
+                    pointBackgroundColor: (ctx) => {
+                        const raw = ctx.raw || {};
+                        return raw.critical ? '#fa393d' : '#5c3dfa';
+                    },
+                    pointRadius: (ctx) => {
+                        const raw = ctx.raw || {};
+                        return raw.critical ? 3 : 0.2;
+                    },
+                    pointBorderWidth: (ctx) => {
+                        const raw = ctx.raw || {};
+                        return raw.critical ? 2 : 1;
+                    },
+                    pointBorderColor: (ctx) => {
+                        const raw = ctx.raw || {};
+                        return raw.critical ? '#b80b1c' : '#5c3dfa';
+                    },
                 }
             ]
         },
@@ -52,8 +67,7 @@ export const initializeEcgChart = () => {
                         display: true,
                         text: 'Time (s)'
                     },
-                    ticks: {
-                    }
+                    ticks: {}
                 },
                 y: {
                     title: {
@@ -91,14 +105,16 @@ export const initializeEcgChart = () => {
 
 export const addEcgPoint = ({
                                 ts_millis,
-                                voltage
+                                voltage,
+                                critical
                             }) => {
     if (!ecgChart) {
-        alert('ECG chart not initialized. Please wait for the page to load.')
+        alert('ECG chart not initialized. Please wait for the page to load.');
         return;
     }
     ecgChart.data.datasets[0].data.push({
-        x: ts_millis, // Should be ms since epoch (a number)
-        y: voltage
+        x: ts_millis,
+        y: voltage,
+        critical: !!critical
     });
 };
