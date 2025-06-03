@@ -4,6 +4,6 @@ import java.util.UUID;
 
 interface WsNotifier {
 
-    void notify(final UUID patientId, final EcgData ecgData);
+    void notify(final Patient patient, final EcgData ecgData);
 
 }

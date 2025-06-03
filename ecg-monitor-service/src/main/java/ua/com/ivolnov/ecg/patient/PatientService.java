@@ -1,14 +1,13 @@
 package ua.com.ivolnov.ecg.patient;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ua.com.ivolnov.ecg.source.EcgSourceProducer;
 
 @Service
 @RequiredArgsConstructor
@@ -16,26 +15,26 @@ public class PatientService {
 
     private final Map<UUID, Patient> patients = new ConcurrentHashMap<>();
 
-    private final EcgSourceProducer ecgSourceProducer;
-    private final EcgSourceConsumer ecgSourceConsumer;
-
-    @PostConstruct
-    public void initStubPatient() {
-        addPatient("patient #1");
-    }
 
     public Set<Patient> getAllPatients() {
         return Set.copyOf(patients.values());
     }
 
-    public void addPatient(final String name) {
+    public Patient addPatient(final String name) {
         final UUID id = UUID.randomUUID();
-        patients.put(id, new Patient(id, name));
-        ecgSourceProducer.scheduleForPatient(id, sample -> ecgSourceConsumer.acceptSample(id, sample));
+        final Patient patient = new Patient(id, name);
+        patients.put(patient.getId(), patient);
+        return patient;
     }
 
-    public void removePatient(final UUID id) {
-        patients.remove(id);
-        ecgSourceProducer.unscheduleForPatient(id);
+    public Optional<Patient> removePatient(final UUID id) {
+        return getPatient(id).stream()
+                .peek(patient -> patients.remove(patient.getId()))
+                .findFirst();
     }
+
+    public Optional<Patient> getPatient(final UUID id) {
+        return Optional.ofNullable(patients.get(id));
+    }
+
 }
