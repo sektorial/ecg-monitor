@@ -27,11 +27,13 @@ public class EcgDataScheduler {
 
     private final SimpMessagingTemplate messagingTemplate;
     private final EcgWaveGenerator ecgWaveGenerator;
+    private final EcgAiModel ecgAiModel;
 
     public void scheduleForPatient(final UUID patientId) {
         TASKS.computeIfAbsent(patientId, id -> SCHEDULER.scheduleAtFixedRate(() -> {
             double value = ecgWaveGenerator.generateEcgValue(id);
-            messagingTemplate.convertAndSend("/topic/patient/" + id, new EcgData(value));
+            final boolean criticalSpike = ecgAiModel.isCriticalSpike(value);
+            messagingTemplate.convertAndSend("/topic/patient/" + id, new EcgData(value, criticalSpike));
         }, 0, ECG_DATA_INTERVAL_MILLIS, MILLISECONDS));
     }
 
@@ -54,6 +56,8 @@ public class EcgDataScheduler {
         long timestamp = System.currentTimeMillis();
         @JsonProperty("voltage")
         double value;
+        @JsonProperty("critical")
+        boolean critical;
     }
 
 }
