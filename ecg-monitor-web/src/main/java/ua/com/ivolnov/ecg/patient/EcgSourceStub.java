@@ -13,12 +13,12 @@ class EcgSourceStub {
     private final EcgSourceConsumer ecgSourceConsumer;
 
     public void addPatientSource(final Patient patient) {
-        ecgSourceProducer.scheduleForPatient(patient.getId(),
+        ecgSourceProducer.initProducerForPatient(patient.getId(),
                 sample -> ecgSourceConsumer.acceptSample(patient.getId(), sample));
     }
 
     public void removePatientSource(@NonNull final Patient patient) {
-        ecgSourceProducer.unscheduleForPatient(patient.getId());
+        ecgSourceProducer.disposeProducerForPatient(patient.getId());
     }
 
 }
