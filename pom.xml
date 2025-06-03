@@ -16,6 +16,7 @@
     <description>Project for monitoring ECG.</description>
     <modules>
         <module>ecg-monitor-ui</module>
+        <module>ecg-monitor-source</module>
         <module>ecg-monitor-service</module>
         <module>ecg-monitor-web</module>
         <module>ecg-monitor-it</module>

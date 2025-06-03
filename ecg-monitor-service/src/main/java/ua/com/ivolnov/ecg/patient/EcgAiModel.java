@@ -1,6 +1,7 @@
 package ua.com.ivolnov.ecg.patient;
 
 import org.springframework.stereotype.Component;
+import ua.com.ivolnov.ecg.source.EcgSourceSample;
 
 /**
  * Current version is the simplest stub for POC. In real-world scenario AI Model should  the shape and evolution of
@@ -11,8 +12,8 @@ class EcgAiModel {
 
     private static final double SPIKE_THRESHOLD = 1.5;
 
-    boolean isCriticalSpike(double voltage) {
-        return Math.abs(voltage) > SPIKE_THRESHOLD;
+    public boolean isCriticalSpike(final EcgSourceSample sample) {
+        return Math.abs(sample.getVoltage()) > SPIKE_THRESHOLD;
     }
 
 }
