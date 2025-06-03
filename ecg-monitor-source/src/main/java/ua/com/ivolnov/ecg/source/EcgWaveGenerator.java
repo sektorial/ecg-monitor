@@ -1,4 +1,4 @@
-package ua.com.ivolnov.ecg.patient;
+package ua.com.ivolnov.ecg.source;
 
 import java.util.Map;
 import java.util.UUID;
@@ -18,7 +18,7 @@ final class EcgWaveGenerator {
     private static final int CRITICAL_ECG_SPIKE_INTERVAL_MILLIS = 10_000;
     private static final Map<UUID, AtomicLong> CRITICAL_SPIKES_MILLIS = new ConcurrentHashMap<>();
 
-    double generateEcgValue(final UUID patientId) {
+    EcgSourceSample generateEcgValue(final UUID patientId) {
         final long currentTimeMillis = System.currentTimeMillis();
         double valueWithNoise = enrichValueWithNoise(generatePlainEcgValue(currentTimeMillis));
         if (shouldInjectCriticalSpike(patientId, currentTimeMillis)) {
@@ -28,9 +28,9 @@ final class EcgWaveGenerator {
             } else {
                 criticalSpikeMillis.set(currentTimeMillis);
             }
-            return transformValueToSpike(valueWithNoise);
+            return EcgSourceSample.of(transformValueToSpike(valueWithNoise));
         }
-        return valueWithNoise;
+        return EcgSourceSample.of(valueWithNoise);
     }
 
     private double transformValueToSpike(final double value) {

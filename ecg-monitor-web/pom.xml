@@ -11,6 +11,11 @@
     <dependencies>
         <dependency>
             <groupId>ua.com.ivolnov</groupId>
+            <artifactId>ecg-monitor-source</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ua.com.ivolnov</groupId>
             <artifactId>ecg-monitor-service</artifactId>
             <version>${project.version}</version>
         </dependency>
