@@ -15,7 +15,7 @@ final class EcgWaveGenerator {
 
     private final Map<UUID, AtomicLong> lastOccurredSpikes;
 
-    EcgSourceSample generateEcgValue(final UUID patientId) {
+    EcgSourceSample generateEcgSample(final UUID patientId) {
         final long currentTimeMillis = System.currentTimeMillis();
         double valueWithNoise = enrichValueWithNoise(generatePlainEcgValue(currentTimeMillis));
         if (shouldInjectCriticalSpike(patientId, currentTimeMillis)) {

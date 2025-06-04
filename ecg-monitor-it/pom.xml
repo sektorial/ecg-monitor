@@ -11,8 +11,9 @@
     <dependencies>
         <dependency>
             <groupId>ua.com.ivolnov</groupId>
-            <artifactId>ecg-monitor-service</artifactId>
+            <artifactId>ecg-monitor-web</artifactId>
             <version>${project.version}</version>
+            <classifier>classes</classifier>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -20,5 +21,28 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>integration-tests</id>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
