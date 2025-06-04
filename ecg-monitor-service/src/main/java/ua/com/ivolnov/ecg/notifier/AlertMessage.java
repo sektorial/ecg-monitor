@@ -1,4 +1,4 @@
-package ua.com.ivolnov.ecg.patient;
+package ua.com.ivolnov.ecg.notifier;
 
 import java.util.UUID;
 

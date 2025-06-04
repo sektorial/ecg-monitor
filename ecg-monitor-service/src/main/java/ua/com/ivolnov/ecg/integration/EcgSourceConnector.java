@@ -1,20 +1,19 @@
-package ua.com.ivolnov.ecg.patient;
+package ua.com.ivolnov.ecg.integration;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
-import org.springframework.stereotype.Component;
+import ua.com.ivolnov.ecg.patient.Patient;
+import ua.com.ivolnov.ecg.processor.EcgSampleProcessor;
 import ua.com.ivolnov.ecg.source.EcgSourceProducer;
 
-@Component
 @RequiredArgsConstructor
-class EcgSourceStub {
+public class EcgSourceConnector {
 
     private final EcgSourceProducer ecgSourceProducer;
-    private final EcgSourceConsumer ecgSourceConsumer;
+    private final EcgSampleProcessor ecgSampleProcessor;
 
     public void addPatientSource(final Patient patient) {
-        ecgSourceProducer.initProducerForPatient(patient.getId(),
-                sample -> ecgSourceConsumer.acceptSample(patient.getId(), sample));
+        ecgSourceProducer.initProducerForPatient(patient.getId(), ecgSampleProcessor);
     }
 
     public void removePatientSource(@NonNull final Patient patient) {

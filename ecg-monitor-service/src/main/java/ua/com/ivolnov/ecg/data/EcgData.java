@@ -1,11 +1,11 @@
-package ua.com.ivolnov.ecg.patient;
+package ua.com.ivolnov.ecg.data;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Value;
 import ua.com.ivolnov.ecg.source.EcgSourceSample;
 
 @Value(staticConstructor = "of")
-class EcgData {
+public class EcgData {
 
     @JsonProperty("ts_millis")
     long timestamp;
@@ -14,7 +14,7 @@ class EcgData {
     @JsonProperty("critical")
     boolean critical;
 
-    static EcgData of(final EcgSourceSample sample, final boolean critical) {
+    public static EcgData of(final EcgSourceSample sample, final boolean critical) {
         return new EcgData(sample.getTimestampMillis(), sample.getVoltage(), critical);
     }
 

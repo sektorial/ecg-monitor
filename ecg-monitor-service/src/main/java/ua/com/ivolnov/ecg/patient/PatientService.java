@@ -4,17 +4,13 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
 public class PatientService {
 
-    private final Map<UUID, Patient> patients = new ConcurrentHashMap<>();
-
+    private final Map<UUID, Patient> patients;
 
     public Set<Patient> getAllPatients() {
         return Set.copyOf(patients.values());

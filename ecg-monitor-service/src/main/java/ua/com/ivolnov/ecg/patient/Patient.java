@@ -8,6 +8,8 @@ import lombok.Data;
 @Data
 @AllArgsConstructor
 public class Patient {
+
     private UUID id;
     private String name;
+
 }

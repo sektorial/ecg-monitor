@@ -1,18 +1,17 @@
-package ua.com.ivolnov.ecg.patient;
+package ua.com.ivolnov.ecg.notifier;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.stereotype.Component;
+import ua.com.ivolnov.ecg.data.EcgData;
+import ua.com.ivolnov.ecg.patient.Patient;
 
 @Slf4j
-@Component
 @RequiredArgsConstructor
 class AlertNotifier implements WsNotifier {
 
-    private static final String DESTINATION = "/topic/alerts";
-
     private final SimpMessagingTemplate messagingTemplate;
+    private final String destination;
 
     @Override
     public void notify(final Patient patient, final EcgData ecgData) {
@@ -26,7 +25,7 @@ class AlertNotifier implements WsNotifier {
                 .patientName(patient.getName())
                 .timestamp(ecgData.getTimestamp())
                 .build();
-        messagingTemplate.convertAndSend(DESTINATION, message);
+        messagingTemplate.convertAndSend(destination, message);
     }
 
 }

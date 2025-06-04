@@ -1,22 +1,18 @@
 package ua.com.ivolnov.ecg.staff;
 
 import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.stereotype.Service;
 import ua.com.ivolnov.ecg.common.UserRole;
 
-@Service
 @RequiredArgsConstructor
 public class MedicalStaffService {
 
-    private static final Set<MedicalStaff> STAFFS = new CopyOnWriteArraySet<>();
-
     private final InMemoryUserDetailsManager userDetailsManager;
+    private final Set<MedicalStaff> staffSet;
 
     @PostConstruct
     public void initStubUser() {
@@ -24,7 +20,7 @@ public class MedicalStaffService {
     }
 
     public Set<MedicalStaff> getAllStaff() {
-        return Set.copyOf(STAFFS);
+        return Set.copyOf(staffSet);
     }
 
     public void addStaff(final String username, final String password) {
@@ -34,12 +30,12 @@ public class MedicalStaffService {
                         .roles(UserRole.STAFF)
                         .build()
         );
-        STAFFS.add(new MedicalStaff(username, password));
+        staffSet.add(new MedicalStaff(username, password));
     }
 
     public void removeStaff(final String username) {
         userDetailsManager.deleteUser(username);
-        STAFFS.removeIf(staff -> staff.getUsername().equals(username));
+        staffSet.removeIf(staff -> staff.getUsername().equals(username));
     }
 
 }
