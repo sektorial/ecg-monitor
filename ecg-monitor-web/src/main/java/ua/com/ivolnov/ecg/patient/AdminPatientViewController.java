@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import ua.com.ivolnov.ecg.integration.EcgSourceConnector;
 
 @RequestMapping("/web/admin/patient")
 @Controller
@@ -18,12 +19,12 @@ import org.springframework.web.servlet.ModelAndView;
 public class AdminPatientViewController {
 
     private final PatientService patientService;
-    private final EcgSourceStub ecgSourceStub;
+    private final EcgSourceConnector ecgSourceConnector;
 
     @PostConstruct
     public void initStubPatient() {
         final Patient patient = patientService.addPatient("patient #1");
-        ecgSourceStub.addPatientSource(patient);
+        ecgSourceConnector.addPatientSource(patient);
     }
 
     @GetMapping
@@ -37,14 +38,14 @@ public class AdminPatientViewController {
     @PostMapping("/add")
     public String addPatient(@RequestParam final String name) {
         final Patient patient = patientService.addPatient(name);
-        ecgSourceStub.addPatientSource(patient);
+        ecgSourceConnector.addPatientSource(patient);
         return "redirect:/web/admin/patient";
     }
 
     @PostMapping("/remove")
     public String removePatient(@RequestParam final UUID id) {
         final Optional<Patient> patient = patientService.removePatient(id);
-        patient.ifPresent(ecgSourceStub::removePatientSource);
+        patient.ifPresent(ecgSourceConnector::removePatientSource);
         return "redirect:/web/admin/patient";
     }
 }

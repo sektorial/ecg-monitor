@@ -1,4 +1,4 @@
-package ua.com.ivolnov.ecg.patient;
+package ua.com.ivolnov.ecg.data;
 
 import java.util.List;
 import java.util.UUID;
