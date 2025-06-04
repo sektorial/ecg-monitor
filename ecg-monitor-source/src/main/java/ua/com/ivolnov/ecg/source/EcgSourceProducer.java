@@ -13,12 +13,15 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class EcgSourceProducer {
 
-
     private final EcgSourceScheduledTaskFactory taskFactory;
     private final Map<UUID, ScheduledFuture<?>> tasks;
 
     public void initProducerForPatient(final UUID patientId, final Consumer<EcgSourceSample> consumer) {
-        tasks.computeIfAbsent(patientId, id -> taskFactory.createTask(id, consumer));
+        if (tasks.containsKey(patientId)) {
+                throw new IllegalArgumentException("Task has already been created for patient: " + patientId);
+        }
+        final ScheduledFuture<?> task = taskFactory.scheduleTask(patientId, consumer);
+        tasks.put(patientId, task);
     }
 
     public void disposeProducerForPatient(final UUID patientId) {
@@ -30,7 +33,7 @@ public class EcgSourceProducer {
 
     @PreDestroy
     public void disposeAllProducers() {
-        tasks.values().forEach(scheduledFuture -> scheduledFuture.cancel(true));
+        tasks.values().forEach(task -> task.cancel(true));
         tasks.clear();
     }
 

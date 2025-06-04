@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import ua.com.ivolnov.ecg.integration.EcgSourceConnector;
 
+import static ua.com.ivolnov.ecg.common.UserRole.ADMIN;
+
+@PreAuthorize("hasRole('" + ADMIN + "')")
 @RequestMapping("/web/admin/patient")
 @Controller
 @RequiredArgsConstructor

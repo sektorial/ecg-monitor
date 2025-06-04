@@ -16,7 +16,10 @@ class EcgSourceConfiguration {
 
     @Bean
     EcgSourceScheduledTaskFactory ecgSourceScheduledTaskFactory(final EcgWaveGenerator ecgWaveGenerator) {
-        return new EcgSourceScheduledTaskFactory(ecgWaveGenerator, Executors.newScheduledThreadPool(4));
+        return new EcgSourceScheduledTaskFactory(ecgWaveGenerator,
+                Executors.newScheduledThreadPool(4),
+                0,
+                40);
     }
 
 

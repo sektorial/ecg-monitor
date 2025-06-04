@@ -12,19 +12,20 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 @RequiredArgsConstructor
 class EcgSourceScheduledTaskFactory {
 
-    private static final int INITIAL_DELAY = 0;
-    private static final int ECG_DATA_INTERVAL_MILLIS = 40;
-
     private final EcgWaveGenerator ecgWaveGenerator;
     private final ScheduledExecutorService scheduler;
+    private final int initialDelay;
+    private final int ecgDataIntervalMillis;
 
-    ScheduledFuture<?> createTask(final UUID patientId, final Consumer<EcgSourceSample> consumer) {
-        return scheduler.scheduleAtFixedRate(() -> {
-                    final EcgSourceSample sample = ecgWaveGenerator.generateEcgValue(patientId);
-                    consumer.accept(sample);
-                },
-                INITIAL_DELAY,
-                ECG_DATA_INTERVAL_MILLIS,
+    ScheduledFuture<?> scheduleTask(final UUID patientId, final Consumer<EcgSourceSample> consumer) {
+        final EcgSourceTask ecgSourceTask = EcgSourceTask.builder()
+                .ecgWaveGenerator(ecgWaveGenerator)
+                .patientId(patientId)
+                .consumer(consumer)
+                .build();
+        return scheduler.scheduleAtFixedRate(ecgSourceTask,
+                initialDelay,
+                ecgDataIntervalMillis,
                 MILLISECONDS);
     }
 

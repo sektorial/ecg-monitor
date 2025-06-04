@@ -1,0 +1,3 @@
+ecg:
+  development:
+    hrm-enabled: false

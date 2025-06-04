@@ -89,4 +89,30 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <profiles>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <activeProfile>prod</activeProfile>
+            </properties>
+            <build>
+                <!--suppress UnresolvedMavenProperty -->
+                <finalName>ECG-MONITOR_prod_${project.version}</finalName>
+            </build>
+        </profile>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <activeProfile>dev</activeProfile>
+            </properties>
+            <build>
+                <!--suppress UnresolvedMavenProperty -->
+                <finalName>ECG-MONITOR_dev_${project.version}</finalName>
+            </build>
+        </profile>
+    </profiles>
 </project>

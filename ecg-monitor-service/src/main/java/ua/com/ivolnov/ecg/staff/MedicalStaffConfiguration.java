@@ -10,8 +10,8 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 class MedicalStaffConfiguration {
 
     @Bean
-    MedicalStaffService medicalStaffService(final InMemoryUserDetailsManager userDetailsManager) {
-        return new MedicalStaffService(userDetailsManager, new CopyOnWriteArraySet<>());
+    MedicalStaffService medicalStaffService(final InMemoryUserDetailsManager inMemoryUserDetailsManager) {
+        return new MedicalStaffService(inMemoryUserDetailsManager, new CopyOnWriteArraySet<>());
     }
 
 }

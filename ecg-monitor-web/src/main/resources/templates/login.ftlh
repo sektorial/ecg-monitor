@@ -4,7 +4,7 @@
 <#include "./fragments/head.ftlh">
 <body>
 <div class="container">
-    <form action="/login" method="post">
+    <form action="/login" method="post" style="display:inline;">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <div>
             <label for="login-username">Username: </label>
@@ -15,7 +15,7 @@
             <input id="login-password" type="password" name="password"/>
         </div>
         <div>
-            <input id="login-submit" type="submit" value="Login"/>
+            <button type="submit">Login</button>
         </div>
     </form>
 </div>
