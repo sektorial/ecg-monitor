@@ -15,7 +15,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import ua.com.ivolnov.ecg.common.UserRole;
-import ua.com.ivolnov.ecg.configuration.authentication.SecurityConfiguration;
 import ua.com.ivolnov.ecg.patient.Patient;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,13 +35,14 @@ class EcgApplicationIT {
     private static final String PATIENT_NAME = "good patient";
     private static final String STAFF_USERNAME = "staff";
     private static final SharedData SHARED_TEST_DATA = new SharedData();
+    private static final String ADMIN_USERNAME = "admin";
 
     @Autowired
     private MockMvc mockMvc;
 
     @Test
     @Order(1)
-    @WithMockUser(username = SecurityConfiguration.ADMIN_USERNAME, roles = UserRole.ADMIN)
+    @WithMockUser(username = ADMIN_USERNAME, roles = UserRole.ADMIN)
     void shouldCreateStaffByAdmin() throws Exception {
         mockMvc.perform(post("/web/admin/staff/add")
                         .with(csrf())
@@ -54,7 +54,7 @@ class EcgApplicationIT {
 
     @Test
     @Order(1)
-    @WithMockUser(username = SecurityConfiguration.ADMIN_USERNAME, roles = UserRole.ADMIN)
+    @WithMockUser(username = ADMIN_USERNAME, roles = UserRole.ADMIN)
     void shouldCreatePatientByAdmin() throws Exception {
         mockMvc.perform(post("/web/admin/patient/add")
                         .param("name", PATIENT_NAME)
@@ -65,7 +65,7 @@ class EcgApplicationIT {
 
     @Test
     @Order(1)
-    @WithMockUser(username = SecurityConfiguration.ADMIN_USERNAME, roles = UserRole.ADMIN)
+    @WithMockUser(username = ADMIN_USERNAME, roles = UserRole.ADMIN)
     void shouldRetrievePatientViewByAdmin() throws Exception {
         final MvcResult mvcResult = mockMvc.perform(get("/web/admin/patient")
                         .with(csrf()))

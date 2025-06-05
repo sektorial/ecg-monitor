@@ -7,7 +7,6 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
     <artifactId>ecg-monitor-web</artifactId>
-    <packaging>war</packaging>
 
     <dependencies>
         <dependency>
@@ -51,6 +50,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>ua.com.ivolnov.ecg.EcgApplication</mainClass>
+<!--                    <skip>true</skip>-->
                 </configuration>
             </plugin>
             <plugin>
@@ -58,13 +58,30 @@
                 <artifactId>maven-compiler-plugin</artifactId>
             </plugin>
             <plugin>
-                <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <attachClasses>true</attachClasses>
-                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>attach-classes</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <classifier>classes</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
         <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>application*.yaml</include>
+                </includes>
+                <filtering>true</filtering>
+            </resource>
             <resource>
                 <directory>src/main/resources</directory>
             </resource>
